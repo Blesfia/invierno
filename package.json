@@ -1,0 +1,50 @@
+{
+  "name": "invierno",
+  "version": "1.0.1",
+  "description": "Minimal POO backend TS framework",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run lint",
+    "prepare": "npm run build",
+    "preversion": "npm run lint",
+    "version": "git add -A src",
+    "postversion": "git push && git push --tags",
+    "lint": "eslint . --ext .ts"
+  },
+  "files": [
+    "lib/**/*"
+  ],
+  "keywords": [
+    "POO",
+    "DI",
+    "node",
+    "framework"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Blesfia/invierno.git"
+  },
+  "author": "Blesfia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Blesfia/invierno/issues"
+  },
+  "homepage": "https://github.com/Blesfia/invierno#readme",
+  "dependencies": {
+    "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.6.4",
+    "@typescript-eslint/eslint-plugin": "^4.0.1",
+    "@typescript-eslint/parser": "^4.0.1",
+    "eslint": "^7.8.1",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.1",
+    "ts-loader": "^8.0.3",
+    "typescript": "^4.0.2"
+  }
+}

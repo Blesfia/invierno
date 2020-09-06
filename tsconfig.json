@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2016",
+    "removeComments": true,
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "sourceMap": true,
+    "outDir": "lib",
+    "module": "CommonJS",
+    "declaration": true,
+    "lib": ["ES2020"],
+    "strict": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true
+  },
+  "includes": ["src"],
+  "exclude": ["node_modules/**/*", ".vscode/**/*", "examples/**/*"]
+}
