@@ -1,9 +1,10 @@
 import { config } from '../config';
-import { container } from 'tsyringe';
+import { container, injectable } from 'tsyringe';
 import { constructor } from '../types';
 
 export function Controller(path = '') {
   return (constructor: constructor<unknown>): void => {
+    injectable()(constructor);
     const instance = container.resolve(constructor) as {
       [properties: string]: () => void;
     };

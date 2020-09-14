@@ -2,6 +2,6 @@
 import { HttpMethod } from '../enums';
 import { Http } from './http.decorator';
 
-export function Get(path = '') {
-  return Http(path, HttpMethod.get);
+export function Patch(path = '') {
+  return Http(path, HttpMethod.patch);
 }

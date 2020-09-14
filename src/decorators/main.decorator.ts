@@ -18,7 +18,14 @@ export function Main() {
       const configuration = await app.configure();
       configureLogger(configuration.logger);
       config.logger.info('Logger configured');
-
+      const configureHttpService = Reflect.getMetadata('http-server', target);
+      if (!configureHttpService) {
+        config.logger.warn(
+          'Http server not found, use @HttpServer before @Main decorator to apply core http server',
+        );
+      } else {
+        await configureHttpService(config);
+      }
       app.start(config);
     })();
   };
