@@ -16,7 +16,11 @@ export function Controller(path = '') {
       const fullPath = `${path}${computedSubPath}`.replace(/ /g, '');
       config.routes[fullPath] = config.routes[fullPath] || {};
       for (const [method, property] of Object.entries(methods)) {
-        config.routes[fullPath][method] = instance[property].bind(instance);
+        const operation = instance[property].bind(instance);
+        config.routes[fullPath][method] = {
+          operation,
+          parameters: Reflect.get(constructor, property, 'parameters'),
+        };
       }
     }
   };

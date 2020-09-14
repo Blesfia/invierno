@@ -9,10 +9,10 @@ export interface IAppConfiguration {
   logger: IBaseLogger;
   routes: {
     [path: string]: {
-      [method: string]: (
-        req: unknown,
-        res: unknown,
-      ) => unknown | Promise<unknown>;
+      [method: string]: {
+        operation: (req: unknown, res: unknown) => unknown | Promise<unknown>;
+        parameters: Record<string, unknown>;
+      };
     };
   };
 }

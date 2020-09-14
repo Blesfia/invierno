@@ -1,5 +1,6 @@
 export * from './controller.decorator';
 export * from './delete.decorator';
+export * from './file.decorator';
 export * from './get.decorator';
 export * from './http.decorator';
 export * from './injectable.decorator';
