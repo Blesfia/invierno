@@ -1,32 +1,29 @@
-import { constructor, IMain, IBaseLogger } from '../types';
+import { constructor, IMain, IConfiguration, httpAdapter } from '../types';
 import { config } from '../config';
-import { ConsoleLogger } from '../logger';
+import { configureLogger } from '../helpers';
+import { MetadataCode } from '../enums';
 
-function configureLogger(logger?: boolean | constructor<IBaseLogger>) {
-  if (logger) {
-    if (typeof logger === 'boolean') {
-      return (config.logger = new ConsoleLogger('Application'));
-    }
-    return (config.logger = new logger('Application'));
-  }
-}
-
-export function Main() {
+/**
+ * Main decorator, use this decorator in your class entry point
+ * @param configuration Global configuration
+ */
+export function Main(configuration: IConfiguration) {
   return (target: constructor<IMain>): void => {
     const app = new target();
+    let appConfiguration = configureLogger(config, configuration.logger);
+    config.logger.info('Winter is coming');
     (async () => {
-      const configuration = await app.configure();
-      configureLogger(configuration.logger);
-      config.logger.info('Logger configured');
-      const configureHttpService = Reflect.getMetadata('http-server', target);
-      if (!configureHttpService) {
-        config.logger.warn(
-          'Http server not found, use @HttpServer before @Main decorator to apply core http server',
-        );
+      config.logger.info('Run onLoad hook');
+      appConfiguration = (await app.onLoad?.(appConfiguration)) ?? appConfiguration;
+      config.logger.info('Starting server');
+      const httpServer: httpAdapter = Reflect.getMetadata(MetadataCode.httpServer, target);
+      if (!httpServer) {
+        config.logger.warn('Http server not found, use @HttpServer before @Main decorator to apply core http server');
       } else {
-        await configureHttpService(config);
+        await httpServer.configure(config);
+        config.logger.info('Winter has arrived');
       }
-      app.start(config);
+      app.onLoaded?.(config);
     })();
   };
 }

@@ -1,8 +1,8 @@
 import { IBaseLogger } from './base-logger.type';
-import { constructor } from './constructor.type';
+import { parameterMetadata } from './parameter-metadata.type';
 
 export interface IConfiguration {
-  logger?: boolean | constructor<IBaseLogger>;
+  logger?: boolean | IBaseLogger;
 }
 
 export interface IAppConfiguration {
@@ -11,7 +11,7 @@ export interface IAppConfiguration {
     [path: string]: {
       [method: string]: {
         operation: (req: unknown, res: unknown) => unknown | Promise<unknown>;
-        parameters: Record<string, unknown>;
+        parameters: parameterMetadata;
       };
     };
   };

@@ -6,8 +6,6 @@ export abstract class Base {
   protected logger: IBaseLogger;
 
   constructor() {
-    this.logger = new (Reflect.get(config, 'logger') || ConsoleLogger)(
-      this.constructor.name,
-    );
+    this.logger = new (Reflect.get(config, 'logger') || ConsoleLogger)(this.constructor.name);
   }
 }

@@ -16,5 +16,5 @@
     "skipLibCheck": true
   },
   "includes": ["src"],
-  "exclude": ["node_modules/**/*", ".vscode/**/*", "examples/**/*"]
+  "exclude": ["node_modules/**/*", ".vscode/**/*", "examples/**/*", "lib/**/*", "packages/**/*"]
 }
