@@ -18,21 +18,16 @@ Configure your starting point as follow (index.ts)
 
 ```
 import { Main, IConfiguration } from 'invierno';
+import { HttpServer } from 'invierno-fastify';
 import './controllers';
 
-@Main()
-export class Application {
-  // Runs before the Invierno starts the configuration
-  public configure(): IConfiguration {
-    return {
-      logger: true, // Or provide any logger you want
-    };
-  }
-
-  // Runs once Invierno is configured and running
-  public start(configuration) {
-    console.log('configuration: ', configuration);
-  }
+@Main({
+  logger: true, // Or provide any logger instance you want like console
+})
+@HttpServer(3000) // Enable fastify to serve as http server
+export class Application implements IMain {
+  // onLoad?(configuration: IAppConfiguration): IAppConfiguration | Promise<IAppConfiguration>;
+  // onLoaded?(configuration: IAppConfiguration): void;
 }
 ```
 

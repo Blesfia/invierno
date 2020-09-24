@@ -15,10 +15,7 @@ const convertError = (error: ValidationError, errors: Array<{ property: string; 
 };
 
 export function validateDto<T>(data: unknown, dto: unknown): Promise<T> {
-  console.log('dto: ', dto);
-  console.log('data: ', data);
   const validator = plainToClass(dto as ClassType<T>, data as T);
-  console.log('validator: ', validator);
   return validateOrReject(validator)
     .then(() => validator)
     .catch((errors: ValidationError[]) => {

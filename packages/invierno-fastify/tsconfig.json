@@ -11,10 +11,11 @@
     "declaration": true,
     "lib": ["ES2020"],
     "strict": true,
+    "types": ["node"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "skipLibCheck": true
   },
   "includes": ["src"],
-  "exclude": ["node_modules/**/*", ".vscode/**/*", "examples/**/*", "lib/**/*", "packages/**/*"]
+  "exclude": ["node_modules/**/*", ".vscode/**/*", "examples/**/*", "lib/**/*"]
 }

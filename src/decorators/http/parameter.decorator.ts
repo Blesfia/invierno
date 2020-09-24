@@ -7,7 +7,6 @@ import { addParameter, validateDto } from '../../helpers';
 export function Body() {
   return (target: any, propertyKey: string | symbol, parameterIndex: number) => {
     const type = Reflect.getMetadata(MetadataCode.designParamTypes, target, propertyKey)[parameterIndex];
-    console.log('type: ', type);
 
     addParameter(target, propertyKey, parameterIndex, ParameterCode.body, {
       cb: (value) => validateDto(value ?? {}, type),

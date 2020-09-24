@@ -1,0 +1,46 @@
+{
+  "name": "invierno-fastify",
+  "version": "1.0.10",
+  "description": "Minimal POO backend TS framework",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w",
+    "prepublishOnly": "npm run build && npm run lint",
+    "preversion": "npm run lint",
+    "version": "git add -A src",
+    "postversion": "git push && git push --tags",
+    "lint": "eslint . --ext .ts"
+  },
+  "files": [
+    "lib/**/*"
+  ],
+  "keywords": [
+    "POO",
+    "DI",
+    "node",
+    "framework",
+    "fastify",
+    "inivierno"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Blesfia/invierno.git"
+  },
+  "author": "Blesfia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Blesfia/invierno/issues"
+  },
+  "homepage": "https://github.com/Blesfia/invierno#readme",
+  "dependencies": {
+    "fastify": "^3.4.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.2"
+  },
+  "peerDependencies": {
+    "invierno": "^1.0.10"
+  }
+}
