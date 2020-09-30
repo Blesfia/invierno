@@ -9,21 +9,33 @@ export class HttpError extends Error {
 }
 
 export class BadRequestHttpError extends HttpError {
-  public code = ErrorCode.httpBadRequestError;
+  constructor(public message: string, public code: string = ErrorCode.httpBadRequestError, public data: unknown = {}) {
+    super(message, code, data);
+  }
   public statusCode = 400;
 }
 
 export class ServerErrorHttpError extends HttpError {
-  public code = ErrorCode.httpServerError;
   public statusCode = 500;
+  constructor(public message: string, public code: string = ErrorCode.httpServerError, public data: unknown = {}) {
+    super(message, code, data);
+  }
 }
 
 export class ForbiddenHttpError extends HttpError {
-  public code = ErrorCode.httpForbiddenError;
   public statusCode = 403;
+  constructor(public message: string, public code: string = ErrorCode.httpForbiddenError, public data: unknown = {}) {
+    super(message, code, data);
+  }
 }
 
 export class UnauthorizedHttpError extends HttpError {
-  public code = ErrorCode.httpUnauthorizedError;
   public statusCode = 401;
+  constructor(
+    public message: string,
+    public code: string = ErrorCode.httpUnauthorizedError,
+    public data: unknown = {},
+  ) {
+    super(message, code, data);
+  }
 }
