@@ -11,7 +11,7 @@ export function setMetadata(target: any, key: MetadataCode, value: unknown): voi
 
 export function addRoute(target: any, path: string, method: HttpMethod, property: string): void {
   const routes: routeMetadata = Reflect.getMetadata(MetadataCode.routes, target) ?? {};
-  const parameters = Reflect.getMetadata(MetadataCode.parameter, target, property) ?? {};
+  const parameters = Reflect.getMetadata(MetadataCode.parameter, target, property) ?? [];
   routes[path] ||= {};
   routes[path][method] = { property, parameters };
   setMetadata(target, MetadataCode.routes, routes);

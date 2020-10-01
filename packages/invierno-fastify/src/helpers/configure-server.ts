@@ -17,7 +17,7 @@ const handler = async (
   reply: FastifyReply,
 ) => {
   const parameters = [];
-  for (const parameter of parametersMetadata || []) {
+  for (const parameter of parametersMetadata) {
     let parameterValue = parameterMapping[parameter.code]?.(request, reply);
     if (parameter.cb) {
       parameterValue = await parameter.cb(parameterValue);
