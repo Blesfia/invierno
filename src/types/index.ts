@@ -6,5 +6,6 @@ export * from './instance.type';
 export * from './main';
 export * from './parameter-metadata.type';
 export * from './parameter.type';
+export * from './plugin.type';
 export * from './request.type';
 export * from './route-metadata.type';

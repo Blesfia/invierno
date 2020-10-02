@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { fastify, FastifyReply, FastifyRequest } from 'fastify';
-import { IAppConfiguration, HttpMethod, parameterMetadata, ParameterCode } from 'invierno';
+import { IAppConfiguration, HttpMethod, parameterMetadata, ParameterCode, pluginType, PluginCode } from 'invierno';
 import { IFastifyConfiguration } from '../types';
 
 const parameterMapping = {
@@ -10,29 +10,38 @@ const parameterMapping = {
   [ParameterCode.response]: (_: FastifyRequest, response: FastifyReply) => response,
   [ParameterCode.query]: (request: FastifyRequest) => request.query,
 };
+
+const pluginMapping = {
+  [PluginCode.header]: (_request: FastifyRequest, response: FastifyReply, data: { key: string; value: string }) => {
+    response.header(data.key, data.value);
+  },
+};
 const handler = async (
-  parametersMetadata: parameterMetadata,
+  options: { parameters: parameterMetadata; plugins: pluginType[] },
   operation: (...args: unknown[]) => unknown,
   request: FastifyRequest,
   reply: FastifyReply,
 ) => {
   const parameters = [];
-  for (const parameter of parametersMetadata) {
+  for (const parameter of options.parameters) {
     let parameterValue = parameterMapping[parameter.code]?.(request, reply);
     if (parameter.cb) {
       parameterValue = await parameter.cb(parameterValue);
     }
     parameters[parameter.parameterIndex] = parameterValue;
   }
+  for (const plugin of options.plugins) {
+    await pluginMapping[plugin.type]?.(request, reply, plugin.cb() as any);
+  }
   reply.send(await operation(...parameters));
 };
 
 function prepareExecution(
   configuration: IFastifyConfiguration,
-  { operation, parameters }: { operation: any; parameters: parameterMetadata },
+  { operation, parameters, plugins }: { operation: any; parameters: parameterMetadata; plugins: pluginType[] },
 ) {
   return async (request: FastifyRequest, reply: FastifyReply) => {
-    return handler(parameters, operation, request, reply).catch((error) =>
+    return handler({ parameters, plugins }, operation, request, reply).catch((error) =>
       configuration.errorHandler?.(request, reply, error),
     );
   };

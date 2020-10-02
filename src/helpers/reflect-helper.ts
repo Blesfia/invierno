@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import { config } from '../config';
-import { HttpMethod, MetadataCode, ParameterCode } from '../enums';
-import { instance, parameterMetadata, routeMetadata } from '../types';
+import { HttpMethod, MetadataCode, ParameterCode, PluginCode } from '../enums';
+import { instance, parameterMetadata, pluginType, routeMetadata } from '../types';
 
-export function setMetadata(target: any, key: MetadataCode, value: unknown): void {
+export function setMetadata(target: any, key: symbol, value: unknown): void {
   Reflect.defineMetadata(key, value, target);
 }
 
@@ -13,12 +13,25 @@ export function addRoute(target: any, path: string, method: HttpMethod, property
   const routes: routeMetadata = Reflect.getMetadata(MetadataCode.routes, target) ?? {};
   const parameters = Reflect.getMetadata(MetadataCode.parameter, target, property) ?? [];
   routes[path] ||= {};
-  routes[path][method] = { property, parameters };
+  routes[path][method] = { property, parameters, plugins: [] };
   setMetadata(target, MetadataCode.routes, routes);
+}
+
+export function addFunctionPlugin(
+  target: any,
+  property: string,
+  type: PluginCode,
+  cb: (...args: unknown[]) => unknown,
+): void {
+  const functionData = Reflect.getMetadata(MetadataCode.functionMiddleware, target) ?? {};
+  functionData[property] ||= { plugins: [] };
+  functionData[property].plugins.push({ type, cb } as pluginType);
+  setMetadata(target, MetadataCode.functionMiddleware, functionData);
 }
 
 export function addController(instance: instance, path: string): void {
   const routes: routeMetadata = Reflect.getMetadata(MetadataCode.routes, instance.constructor.prototype) ?? {};
+  const functionData = Reflect.getMetadata(MetadataCode.functionMiddleware, instance.constructor.prototype) ?? {};
 
   for (const [subPath, methods] of Object.entries(routes)) {
     const computedSubPath = subPath.length ? `/${subPath}` : '';
@@ -31,6 +44,7 @@ export function addController(instance: instance, path: string): void {
       config.routes[fullPath][method] = {
         operation,
         parameters,
+        plugins: functionData[property]?.plugins ?? [],
       };
     }
   }

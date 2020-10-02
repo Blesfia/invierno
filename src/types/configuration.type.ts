@@ -1,4 +1,6 @@
+import { PluginCode } from '../enums';
 import { IBaseLogger } from './base-logger.type';
+import { unknownFunction } from './common.type';
 import { parameterMetadata } from './parameter-metadata.type';
 
 export interface IConfiguration {
@@ -10,8 +12,9 @@ export interface IAppConfiguration {
   routes: {
     [path: string]: {
       [method: string]: {
-        operation: (req: unknown, res: unknown) => unknown | Promise<unknown>;
+        operation: unknownFunction | Promise<unknown>;
         parameters: parameterMetadata;
+        plugins: Array<{ type: PluginCode; cb: unknownFunction }>;
       };
     };
   };

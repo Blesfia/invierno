@@ -1,12 +1,18 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { HttpMethod } from '../../enums';
-import { addRoute } from '../../helpers';
+import { HttpMethod, PluginCode } from '../../enums';
+import { addFunctionPlugin, addRoute } from '../../helpers';
 
 /** Define a route into a controller */
 export function Http(path: string, method: HttpMethod) {
   return (prototype: any, property: string): void => {
     addRoute(prototype, path, method, property);
+  };
+}
+
+export function Header(key: string, value: string) {
+  return (target: any, propertyKey: string) => {
+    addFunctionPlugin(target, propertyKey, PluginCode.header, () => ({ key, value }));
   };
 }
 

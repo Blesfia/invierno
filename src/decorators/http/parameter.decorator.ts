@@ -1,8 +1,7 @@
-import { MetadataCode, ParameterCode } from '../../enums';
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { addParameter, validateDto } from '../../helpers';
+import { MetadataCode, ParameterCode } from '../../enums';
 
 export function Body() {
   return (target: any, propertyKey: string | symbol, parameterIndex: number) => {
@@ -35,11 +34,5 @@ export function Query() {
 export function PathParams() {
   return (target: any, propertyKey: string | symbol, parameterIndex: number) => {
     addParameter(target, propertyKey, parameterIndex, ParameterCode.pathParams);
-  };
-}
-
-export function Header(key: string, value: string) {
-  return (target: any, propertyKey: string | symbol, parameterIndex: number) => {
-    addParameter(target, propertyKey, parameterIndex, ParameterCode.pathParams, { cb: () => ({ key, value }) });
   };
 }

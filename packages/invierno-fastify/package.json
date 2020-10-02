@@ -1,6 +1,6 @@
 {
   "name": "invierno-fastify",
-  "version": "1.0.12",
+  "version": "1.1.2",
   "description": "Minimal POO backend TS framework",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -36,7 +36,7 @@
   "homepage": "https://github.com/Blesfia/invierno#readme",
   "dependencies": {
     "fastify": "^3.4.1",
-    "invierno": "^1.0.12"
+    "invierno": "^1.1.1"
   },
   "devDependencies": {
     "eslint": "^7.9.0",
