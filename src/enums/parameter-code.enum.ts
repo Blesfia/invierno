@@ -4,4 +4,5 @@ export enum ParameterCode {
   response = 'response',
   query = 'query',
   pathParams = 'pathParams',
+  header = 'header',
 }

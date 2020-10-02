@@ -37,3 +37,9 @@ export function PathParams() {
     addParameter(target, propertyKey, parameterIndex, ParameterCode.pathParams);
   };
 }
+
+export function Header(key: string, value: string) {
+  return (target: any, propertyKey: string | symbol, parameterIndex: number) => {
+    addParameter(target, propertyKey, parameterIndex, ParameterCode.pathParams, { cb: () => ({ key, value }) });
+  };
+}
