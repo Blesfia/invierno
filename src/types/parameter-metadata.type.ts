@@ -1,7 +1,8 @@
 import { ParameterCode } from '../enums';
+import { unknownFunction } from './common.type';
 
 export type parameterMetadata = Array<{
   parameterIndex: number;
   code: ParameterCode;
-  cb: ((value: unknown) => unknown) | undefined;
+  cb: unknownFunction | undefined;
 }>;

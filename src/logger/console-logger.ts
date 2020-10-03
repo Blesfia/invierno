@@ -1,5 +1,12 @@
 import { IBaseLogger } from '../types';
 
+/** Default console logger to use by invierno
+ * @alias ConsoleLogger
+ * @augments IBaseLogger
+ * @example
+ * const logger = new ConsoleLogger('Context');
+ * logger.info('Message', { foo: 'bar' }); // this will print "[Context] - Message { foo: 'bar' }"
+ */
 export class ConsoleLogger implements IBaseLogger {
   constructor(private context: string) {}
 
@@ -10,6 +17,7 @@ export class ConsoleLogger implements IBaseLogger {
     }
     return [logMessage];
   }
+
   public info(message: string, ...args: unknown[]): void {
     console.info(...this.buildMessage(message, args));
   }

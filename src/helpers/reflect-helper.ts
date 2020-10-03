@@ -4,6 +4,7 @@
 import { config } from '../config';
 import { HttpMethod, MetadataCode, ParameterCode, PluginCode } from '../enums';
 import { instance, parameterMetadata, pluginType, routeMetadata } from '../types';
+import { unknownFunction } from '../types/common.type';
 
 export function setMetadata(target: any, key: symbol, value: unknown): void {
   Reflect.defineMetadata(key, value, target);
@@ -27,6 +28,10 @@ export function addFunctionPlugin(
   functionData[property] ||= { plugins: [] };
   functionData[property].plugins.push({ type, cb } as pluginType);
   setMetadata(target, MetadataCode.functionMiddleware, functionData);
+}
+
+export function customFunctionPlugin(cb: (...args: unknown[]) => unknown) {
+  return (target: any, propertyKey: string) => addFunctionPlugin(target, propertyKey, PluginCode.custom, cb);
 }
 
 export function addController(instance: instance, path: string): void {
@@ -55,9 +60,14 @@ export function addParameter(
   propertyKey: string | symbol,
   parameterIndex: number,
   code: ParameterCode,
-  options?: { cb: (value: unknown) => unknown },
+  options?: { cb: unknownFunction },
 ): void {
   const parameters: parameterMetadata = Reflect.getOwnMetadata(MetadataCode.parameter, target, propertyKey) || [];
   parameters.push({ parameterIndex, code, cb: options?.cb });
   Reflect.defineMetadata(MetadataCode.parameter, parameters, target, propertyKey);
+}
+
+export function customParameterPlugin(cb: (...args: unknown[]) => unknown) {
+  return (target: any, propertyKey: string, parameterIndex: number) =>
+    addParameter(target, propertyKey, parameterIndex, ParameterCode.custom, { cb });
 }

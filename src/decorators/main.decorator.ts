@@ -4,8 +4,37 @@ import { configureLogger } from '../helpers';
 import { MetadataCode } from '../enums';
 
 /**
- * Main decorator, use this decorator in your class entry point
- * @param configuration Global configuration
+ * Welcome to invierno, the winter is coming! <br>
+ *
+ * To start using invierno, you will need to use the @Main decorator ({@link Main}), use it as your starting point and invierno will load automatically.
+ * <br>
+ * @module Getting started
+ * @example
+ * //index.ts
+ * import { Main, IMain, IAppConfiguration } from 'invierno';
+ * 
+ * // @Main(configuration)
+export class Application implements IMain {
+  // onLoad?(configuration: IAppConfiguration): IAppConfiguration | Promise<IAppConfiguration>;
+  // onLoaded?(configuration: IAppConfiguration): void;
+}
+ */
+/**
+ * Main decorator, use it only once as your starting point for your application
+ * <br><br>
+ * See {@link IMain} to check the life cycle hooks
+ * 
+ * @alias Main
+ * @param {IConfiguration} configuration Global configuration
+ * @example
+ * //index.ts
+ * import { Main, IMain, IAppConfiguration } from 'invierno';
+ * 
+ * // @Main(configuration)
+export class Application implements IMain {
+  // onLoad?(configuration: IAppConfiguration): IAppConfiguration | Promise<IAppConfiguration>;
+  // onLoaded?(configuration: IAppConfiguration): void;
+}
  */
 export function Main(configuration: IConfiguration) {
   return (target: constructor<IMain>): void => {

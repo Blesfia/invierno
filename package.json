@@ -1,8 +1,9 @@
 {
   "name": "invierno",
-  "version": "1.1.1",
+  "version": "1.1.3",
   "description": "Minimal POO backend TS framework",
   "main": "lib/index.js",
+  "homepage": "http://blesfia.github.io/invierno",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
@@ -11,7 +12,9 @@
     "preversion": "npm run lint",
     "version": "git add -A src",
     "postversion": "git push && git push --tags",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "docs": "jsdoc -c jsdoc.json",
+    "deploy:docs": "npm run docs || gh-pages -d docs"
   },
   "files": [
     "lib/**/*"
@@ -31,7 +34,6 @@
   "bugs": {
     "url": "https://github.com/Blesfia/invierno/issues"
   },
-  "homepage": "https://github.com/Blesfia/invierno#readme",
   "dependencies": {
     "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
@@ -42,9 +44,13 @@
     "@types/node": "^14.6.4",
     "@typescript-eslint/eslint-plugin": "^4.0.1",
     "@typescript-eslint/parser": "^4.0.1",
+    "better-docs": "^2.3.2",
+    "docdash": "^1.2.0",
     "eslint": "^7.8.1",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "gh-pages": "^3.1.0",
+    "jsdoc": "^3.6.6",
     "prettier": "^2.1.1",
     "typescript": "^4.0.2"
   }

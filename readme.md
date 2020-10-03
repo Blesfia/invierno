@@ -44,3 +44,7 @@ export class ControllerTest {
   }
 }
 ```
+
+## Looking for docs?
+
+Go <a href="https://blesfia.github.io/invierno/module-Getting%2520started.html" target="_blank">here</a>
