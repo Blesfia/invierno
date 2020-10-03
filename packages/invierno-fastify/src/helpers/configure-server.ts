@@ -3,19 +3,20 @@ import { fastify, FastifyReply, FastifyRequest } from 'fastify';
 import { IAppConfiguration, HttpMethod, parameterMetadata, ParameterCode, pluginType, PluginCode } from 'invierno';
 import { IFastifyConfiguration } from '../types';
 
-const parameterMapping = {
+const parameterMapping: { [key: string]: any } = {
   [ParameterCode.body]: (request: FastifyRequest) => request.body,
   [ParameterCode.pathParams]: (request: FastifyRequest) => request.params,
+  [ParameterCode.query]: (request: FastifyRequest) => request.query,
   [ParameterCode.request]: (request: FastifyRequest) => request,
   [ParameterCode.response]: (_: FastifyRequest, response: FastifyReply) => response,
-  [ParameterCode.query]: (request: FastifyRequest) => request.query,
 };
 
-const pluginMapping = {
+const pluginMapping: { [key: string]: any } = {
   [PluginCode.header]: (_request: FastifyRequest, response: FastifyReply, data: { key: string; value: string }) => {
     response.header(data.key, data.value);
   },
 };
+
 const handler = async (
   options: { parameters: parameterMetadata; plugins: pluginType[] },
   operation: (...args: unknown[]) => unknown,
@@ -23,15 +24,16 @@ const handler = async (
   reply: FastifyReply,
 ) => {
   const parameters = [];
+  for (const plugin of options.plugins) {
+    const data = await plugin.cb(request, reply);
+    await pluginMapping[plugin.type]?.(request, reply, data as any);
+  }
   for (const parameter of options.parameters) {
-    let parameterValue = parameterMapping[parameter.code]?.(request, reply);
+    let parameterValue = parameterMapping[parameter.code]?.(request, reply) as any;
     if (parameter.cb) {
-      parameterValue = await parameter.cb(parameterValue);
+      parameterValue = await parameter.cb(request, reply, parameterValue);
     }
     parameters[parameter.parameterIndex] = parameterValue;
-  }
-  for (const plugin of options.plugins) {
-    await pluginMapping[plugin.type]?.(request, reply, plugin.cb() as any);
   }
   reply.send(await operation(...parameters));
 };
@@ -48,9 +50,11 @@ function prepareExecution(
 }
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export async function configureServer(port: number, options: IFastifyConfiguration, app: IAppConfiguration) {
-  const server = fastify({
-    logger: false,
-  });
+  const server =
+    options.server ??
+    fastify({
+      logger: false,
+    });
 
   for (const [path, operation] of Object.entries(app.routes)) {
     for (const [method, execution] of Object.entries(operation)) {
