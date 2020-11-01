@@ -19,10 +19,14 @@ export function validateDto<T>(data: unknown, dto: unknown): Promise<T> {
   return validateOrReject(validator)
     .then(() => validator)
     .catch((errors: ValidationError[]) => {
-      throw new BadRequestHttpError(
-        '',
-        ErrorCode.invalidBody,
-        errors.map((error) => convertError(error, [])),
-      );
+      if (errors.length) {
+        throw new BadRequestHttpError(
+          '',
+          ErrorCode.invalidBody,
+          errors.map((error) => convertError(error, [])),
+        );
+      } else {
+        return data as T;
+      }
     });
 }
